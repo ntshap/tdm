@@ -80,14 +80,14 @@
 
         <!-- NAV -->
         <nav
-            class="fixed top-0 w-full z-50 px-6 py-4 bg-black/95 backdrop-blur-sm border-b border-white/10 text-white transition-all duration-300 shadow-xl">
+            class="fixed top-0 w-full z-50 px-3 md:px-6 py-3 md:py-4 bg-black/95 backdrop-blur-sm border-b border-white/10 text-white transition-all duration-300 shadow-xl">
             <div class="max-w-[1400px] mx-auto flex justify-between items-center">
-                <a href="#" class="cursor-hover flex items-center gap-3 group">
+                <a href="#" class="cursor-hover flex items-center gap-2 md:gap-3 group">
                     <img src="./public/LOGO_GA_PETJAH.webp" alt="The Digital Ministry"
-                        class="h-10 w-auto object-contain">
+                        class="h-8 md:h-10 w-auto object-contain">
                     <span
-                        class="font-display text-xl md:text-2xl uppercase tracking-tighter group-hover:text-brand-pink transition-colors">The
-                        Digital Ministry<span class="text-brand-pink">.</span></span>
+                        class="font-display text-sm md:text-2xl uppercase tracking-tighter group-hover:text-brand-pink transition-colors hidden xs:inline">TDM<span
+                            class="text-brand-pink">.</span></span>
                 </a>
                 <div class="hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest items-center">
                     <a href="#about"
@@ -147,33 +147,36 @@
 
             <!-- Mobile Menu Overlay -->
             <div id="mobile-menu"
-                class="fixed inset-0 bg-black/95 backdrop-blur-md z-[9999] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-300 text-white">
+                class="fixed inset-0 bg-black z-[9999] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-300">
                 <button onclick="toggleMobileMenu()"
-                    class="absolute top-6 right-6 text-white hover:text-brand-pink p-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    class="absolute top-4 right-4 text-white hover:text-brand-pink p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </button>
-                <div class="flex flex-col gap-8 text-center uppercase font-display text-3xl">
+                <div class="flex flex-col gap-6 text-center uppercase font-display text-white">
                     <a href="#about" onclick="toggleMobileMenu()"
-                        class="hover:text-brand-pink transition-colors">About</a>
+                        class="text-4xl hover:text-brand-pink transition-colors">About</a>
                     <a href="#strategy" onclick="toggleMobileMenu()"
-                        class="hover:text-brand-orange transition-colors">Strategy</a>
+                        class="text-4xl hover:text-brand-orange transition-colors">Strategy</a>
 
                     <!-- Mobile Resources Group -->
-                    <div class="flex flex-col gap-4 items-center border-y border-white/10 py-4 my-2">
-                        <span class="text-brand-pink text-xl tracking-widest font-mono opacity-70">/// Resources</span>
-                        <a href="#" class="text-2xl hover:text-brand-pink transition-colors">Design Asset</a>
-                        <a href="#" class="text-2xl hover:text-brand-pink transition-colors">Devotional</a>
-                        <a href="#" class="text-2xl hover:text-brand-pink transition-colors">Others</a>
+                    <div class="flex flex-col gap-3 items-center border-y border-white/20 py-6 my-2">
+                        <span class="text-brand-pink text-sm tracking-widest font-mono">/// RESOURCES</span>
+                        <a href="#" onclick="toggleMobileMenu()"
+                            class="text-2xl text-white/80 hover:text-brand-pink transition-colors">Design Asset</a>
+                        <a href="#" onclick="toggleMobileMenu()"
+                            class="text-2xl text-white/80 hover:text-brand-pink transition-colors">Devotional</a>
+                        <a href="#" onclick="toggleMobileMenu()"
+                            class="text-2xl text-white/80 hover:text-brand-pink transition-colors">Others</a>
                     </div>
 
                     <a href="#partners" onclick="toggleMobileMenu()"
-                        class="hover:text-brand-green transition-colors">Team</a>
+                        class="text-4xl hover:text-brand-green transition-colors">Team</a>
                     <a href="#roadmap" onclick="toggleMobileMenu()"
-                        class="hover:text-brand-pink transition-colors">Events</a>
+                        class="text-4xl hover:text-brand-pink transition-colors">Events</a>
                 </div>
             </div>
         </nav>
@@ -185,8 +188,7 @@
                 <div class="font-mono text-xs md:text-sm uppercase tracking-[0.3em] text-white mb-4 animate-pulse">
                     /// On Internet As It Is In Heaven - 2024/2025
                 </div>
-                <h1
-                    class="font-display text-[14vw] md:text-[12vw] leading-[0.85] text-brand-light opacity-90 tracking-tighter">
+                <h1 class="font-display text-[20vw] md:text-[12vw] leading-[0.85] text-brand-light tracking-tighter">
                     THE DIGITAL<br>MINISTRY
                 </h1>
             </div>
@@ -353,8 +355,8 @@
         <!-- STRATEGY (Ex Resources) -->
         <section id="strategy" class="bg-brand-light py-24 px-4 bg-grid-black border-y-4 border-black">
             <div class="max-w-[1400px] mx-auto">
-                <div class="flex flex-col md:flex-row items-end justify-between mb-16 px-4">
-                    <h2 class="font-display text-5xl md:text-7xl text-black uppercase leading-[0.9]">
+                <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-8 md:mb-16 px-4">
+                    <h2 class="font-display text-4xl md:text-7xl text-black uppercase leading-[0.9]">
                         Community-Based<br><span class="text-brand-orange">Digital Ministry</span>
                     </h2>
                     <p class="max-w-lg text-right font-medium mt-6 md:mt-0 opacity-80 text-base leading-relaxed">
@@ -628,13 +630,13 @@
         <!-- PLATFORM (Ex VENUE) -->
         <section id="platform" class="bg-white py-0 border-y-4 border-black">
             <div class="grid grid-cols-1 md:grid-cols-2">
-                <div class="p-12 md:p-24 flex flex-col justify-center bg-brand-light">
-                    <div class="mb-8">
+                <div class="p-6 md:p-24 flex flex-col justify-center bg-brand-light">
+                    <div class="mb-4 md:mb-8">
                         <span
                             class="bg-brand-black text-white px-2 py-1 text-xs font-bold uppercase tracking-widest">Platform</span>
                     </div>
-                    <h2 class="font-display text-6xl uppercase mb-8">Comprehensive<br>Toolkit</h2>
-                    <p class="font-body text-xl leading-relaxed mb-8 max-w-md">
+                    <h2 class="font-display text-4xl md:text-6xl uppercase mb-4 md:mb-8">Comprehensive<br>Toolkit</h2>
+                    <p class="font-body text-base md:text-xl leading-relaxed mb-6 md:mb-8 max-w-md">
                         A centralized platform combining design resources, scheduling tools, and team collaboration
                         features. Built for churches of all sizes.
                     </p>
@@ -946,7 +948,7 @@
                     <p class="text-white/40 text-[10px] uppercase">© 2026 The Digital Ministry. All rights reserved.</p>
                 </div>
                 <h1
-                    class="font-display text-[14vw] text-center text-brand-pink leading-none opacity-10 select-none translate-y-[20%] pointer-events-none">
+                    class="font-display text-[10vw] md:text-[14vw] text-center text-brand-pink leading-none opacity-10 select-none translate-y-[20%] pointer-events-none">
                     MINISTRY</h1>
             </div>
         </footer>
