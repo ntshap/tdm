@@ -147,37 +147,37 @@
 
             <!-- Mobile Menu Overlay -->
             <div id="mobile-menu"
-                class="fixed inset-0 z-[9999] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-300"
-                style="background-color: #000000 !important;">
+                class="fixed top-0 left-0 right-0 bottom-0 w-full h-full z-[9999] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-300"
+                style="background: #000000; min-height: 100vh; min-height: 100dvh;">
                 <button onclick="toggleMobileMenu()"
-                    class="absolute top-4 right-4 text-white hover:text-brand-pink p-2">
+                    class="absolute top-4 right-4 text-white hover:text-brand-pink p-2 z-10">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </button>
-                <div class="flex flex-col gap-6 text-center uppercase font-display text-white">
+                <div class="flex flex-col gap-5 text-center uppercase font-display text-white px-8">
                     <a href="#about" onclick="toggleMobileMenu()"
-                        class="text-4xl hover:text-brand-pink transition-colors">About</a>
+                        class="text-3xl hover:text-brand-pink transition-colors">About</a>
                     <a href="#strategy" onclick="toggleMobileMenu()"
-                        class="text-4xl hover:text-brand-orange transition-colors">Strategy</a>
+                        class="text-3xl hover:text-brand-orange transition-colors">Strategy</a>
 
                     <!-- Mobile Resources Group -->
-                    <div class="flex flex-col gap-3 items-center border-y border-white/20 py-6 my-2">
-                        <span class="text-brand-pink text-sm tracking-widest font-mono">/// RESOURCES</span>
+                    <div class="flex flex-col gap-2 items-center border-y border-white/20 py-4 my-1">
+                        <span class="text-brand-pink text-xs tracking-widest font-mono">/// RESOURCES</span>
                         <a href="#" onclick="toggleMobileMenu()"
-                            class="text-2xl text-white/80 hover:text-brand-pink transition-colors">Design Asset</a>
+                            class="text-xl text-white/80 hover:text-brand-pink transition-colors">Design Asset</a>
                         <a href="#" onclick="toggleMobileMenu()"
-                            class="text-2xl text-white/80 hover:text-brand-pink transition-colors">Devotional</a>
+                            class="text-xl text-white/80 hover:text-brand-pink transition-colors">Devotional</a>
                         <a href="#" onclick="toggleMobileMenu()"
-                            class="text-2xl text-white/80 hover:text-brand-pink transition-colors">Others</a>
+                            class="text-xl text-white/80 hover:text-brand-pink transition-colors">Others</a>
                     </div>
 
                     <a href="#partners" onclick="toggleMobileMenu()"
-                        class="text-4xl hover:text-brand-green transition-colors">Team</a>
+                        class="text-3xl hover:text-brand-green transition-colors">Team</a>
                     <a href="#roadmap" onclick="toggleMobileMenu()"
-                        class="text-4xl hover:text-brand-pink transition-colors">Events</a>
+                        class="text-3xl hover:text-brand-pink transition-colors">Events</a>
                 </div>
             </div>
         </nav>
@@ -189,7 +189,7 @@
                 <div class="font-mono text-xs md:text-sm uppercase tracking-[0.3em] text-white mb-4 animate-pulse">
                     /// On Internet As It Is In Heaven - 2024/2025
                 </div>
-                <h1 class="font-display text-[22vw] md:text-[12vw] leading-[0.85] text-brand-light tracking-tighter">
+                <h1 class="font-display text-[16vw] md:text-[12vw] leading-[0.85] text-brand-light tracking-tighter">
                     THE DIGITAL<br>MINISTRY
                 </h1>
             </div>
@@ -920,6 +920,8 @@
 
         <!-- FOOTER -->
         <footer class="bg-brand-dark pt-32 pb-0 px-6 overflow-hidden">
+            <!-- Black bar at bottom to hide green -->
+            <div class="fixed bottom-0 left-0 right-0 h-4 bg-black z-40 md:hidden"></div>
             <div class="max-w-[1400px] mx-auto">
                 <div class="flex flex-col md:flex-row justify-between items-start mb-24">
                     <div class="mb-12 md:mb-0">
