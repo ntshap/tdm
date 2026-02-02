@@ -147,7 +147,7 @@
 
             <!-- Mobile Menu Overlay -->
             <div id="mobile-menu"
-                class="fixed inset-0 bg-black z-[60] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-300">
+                class="fixed inset-0 bg-black/95 backdrop-blur-md z-[9999] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-300 text-white">
                 <button onclick="toggleMobileMenu()"
                     class="absolute top-6 right-6 text-white hover:text-brand-pink p-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
@@ -181,11 +181,12 @@
         <!-- HERO SECTION -->
         <header class="relative min-h-screen flex flex-col justify-center items-center pt-24 pb-10 px-4">
             <!-- Main Title Group -->
-            <div class="relative z-10 text-center mix-blend-overlay">
+            <div class="relative z-10 text-center">
                 <div class="font-mono text-xs md:text-sm uppercase tracking-[0.3em] text-white mb-4 animate-pulse">
                     /// On Internet As It Is In Heaven - 2024/2025
                 </div>
-                <h1 class="font-display text-[18vw] leading-[0.85] text-brand-light opacity-90 tracking-tighter">
+                <h1
+                    class="font-display text-[14vw] md:text-[12vw] leading-[0.85] text-brand-light opacity-90 tracking-tighter">
                     THE DIGITAL<br>MINISTRY
                 </h1>
             </div>
@@ -205,7 +206,7 @@
                     <h2 class="font-display text-4xl md:text-5xl uppercase leading-none text-left mb-6">
                         Equip &<br>Empower
                     </h2>
-                    <p class="font-body text-xl leading-relaxed border-l-4 border-black pl-6 mb-8">
+                    <p class="font-body text-base md:text-xl leading-relaxed border-l-4 border-black pl-6 mb-8">
                         The Digital Ministry is a digital ministry initiative designed <span
                             class="font-bold bg-white px-1">to equip and empower</span> the digital ministry workers to
                         navigate their ministry online and <span class="font-bold bg-white px-1">to reach the digital
@@ -229,7 +230,7 @@
 
             <!-- Scroll Indicator -->
             <div
-                class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 mix-blend-overlay text-white opacity-60">
+                class="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-white opacity-60">
                 <span class="uppercase text-[10px] tracking-widest">Scroll to Explore</span>
                 <div class="w-[1px] h-12 bg-white relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-full h-1/2 bg-brand-pink animate-marquee"
