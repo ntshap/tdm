@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONFERA 2026 | The Future of Generative Art</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind & Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-green': '#004d30',
+                        'brand-pink': '#ff9ec6',
+                        'brand-orange': '#ff6b4a',
+                        'brand-dark': '#0a0a0a',
+                        'brand-light': '#f4f4f0',
+                        'brand-blue': '#2b2d42',
+                    },
+                    fontFamily: {
+                        'display': ['Anton', 'sans-serif'],
+                        'body': ['Space Grotesk', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'grid-white': "linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)",
+                        'grid-black': "linear-gradient(to right, rgba(0,0,0,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.08) 1px, transparent 1px)",
+                        'scanlines': "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1))",
+                    },
+                    boxShadow: {
+                        'hard': '6px 6px 0px 0px rgba(0,0,0,1)',
+                        'hard-xl': '12px 12px 0px 0px rgba(0,0,0,1)',
+                        'hard-hover': '2px 2px 0px 0px rgba(0,0,0,1)',
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'marquee': 'marquee 30s linear infinite',
+                        'pulse-fast': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'blink': 'blink 1s step-end infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        blink: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- CORE STYLES --- */
+        :root {
+            --grain-url: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+        }
+
+        body {
+            background-color: #004d30;
+            cursor: none;
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        #cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        body:hover #cursor {
+            opacity: 1;
+        }
+
+        .hover-target:hover~#cursor,
+        a:hover~#cursor,
+        button:hover~#cursor,
+        .cursor-hover:hover~#cursor {
+            width: 60px;
+            height: 60px;
+        }
+
+        /* Global Noise & Scanline Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            background-image: var(--grain-url);
+            mix-blend-mode: overlay;
+            opacity: 0.35;
+        }
+
+        .scanline-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            background-size: 100% 4px;
+            background-image: var(--scanlines);
+            opacity: 0.05;
+        }
+
+        /* Typography & Layout Utils */
+        h1,
+        h2,
+        h3,
+        h4 {
+            letter-spacing: -0.02em;
+        }
+
+        .clip-notch {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%,
+                    90% 100%, 85% 95%, 80% 100%,
+                    75% 95%, 70% 100%, 65% 95%, 60% 100%,
+                    55% 95%, 50% 100%, 45% 95%, 40% 100%,
+                    35% 95%, 30% 100%, 25% 95%, 20% 100%,
+                    15% 95%, 10% 100%, 5% 95%, 0% 100%);
+        }
+
+        .clip-corner-cut {
+            clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
+        }
+
+        /* CSS Barcode */
+        .barcode {
+            height: 40px;
+            width: 100%;
+            background: linear-gradient(to right,
+                    black 2px, transparent 2px, black 4px, black 6px, transparent 6px,
+                    transparent 8px, black 8px, black 12px, transparent 12px, black 14px,
+                    transparent 16px, black 18px, black 22px, transparent 22px, transparent 24px, black 24px);
+            background-repeat: repeat-x;
+            background-size: 26px 100%;
+        }
+
+        /* Accordion Styles */
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .faq-item.active .faq-content {
+            max-height: 500px;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Venue Map Grid */
+        .map-grid-cell {
+            width: 100%;
+            padding-bottom: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .map-grid-cell.building {
+            background-color: #0a0a0a;
+        }
+
+        .map-grid-cell.active-zone {
+            background-color: #ff6b4a;
+            animation: pulse-map 2s infinite;
+        }
+
+        @keyframes pulse-map {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Three.js */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: currentColor;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 12px 12px 0px 0px rgba(0, 0, 0, 1);
+        }
+    </style>
+</head>
+
+<body class="font-body text-brand-dark antialiased selection:bg-brand-pink selection:text-brand-dark">
+
+    <div id="cursor"></div>
+    <div class="noise-overlay"></div>
+    <div class="scanline-overlay"></div>
+    <div id="webgl-canvas"></div>
+
+    <div class="content-wrapper">
+
+        <!-- NAV -->
+        <nav class="fixed top-0 w-full z-50 px-6 py-5 mix-blend-exclusion text-white">
+            <div class="max-w-[1400px] mx-auto flex justify-between items-center">
+                <a href="#"
+                    class="font-display text-4xl uppercase tracking-tighter hover:text-brand-pink transition-colors cursor-hover">Confera<span
+                        class="text-brand-pink">.</span></a>
+                <div class="hidden md:flex gap-8 font-bold text-sm uppercase tracking-widest">
+                    <a href="#about" class="nav-link relative cursor-hover">About</a>
+                    <a href="#speakers" class="nav-link relative cursor-hover">Speakers</a>
+                    <a href="#agenda" class="nav-link relative cursor-hover">Agenda</a>
+                    <a href="#pricing" class="nav-link relative cursor-hover">Tickets</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="#pricing"
+                        class="bg-white text-black px-6 py-2 font-bold uppercase text-xs tracking-widest hover:bg-brand-pink transition-colors border-2 border-transparent hover:border-white cursor-hover shadow-hard-hover">
+                        Book Now
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- HERO SECTION (Restored Manifesto Version) -->
+        <header class="relative min-h-screen flex flex-col justify-center items-center pt-24 pb-10 px-4">
+
+            <!-- Main Title Group -->
+            <div class="relative z-10 text-center mix-blend-overlay">
+                <div class="font-mono text-xs md:text-sm uppercase tracking-[0.3em] text-white mb-4 animate-pulse">
+                    /// Est. 2023 — Global Summit
+                </div>
+                <h1 class="font-display text-[18vw] leading-[0.8] text-brand-light opacity-90 tracking-tighter">
+                    CONFERA
+                </h1>
+            </div>
+
+            <!-- Hero HUD / Info Box -->
+            <div class="relative z-20 mt-[-4vw] max-w-3xl w-full">
+                <div
+                    class="bg-brand-pink p-8 md:p-12 transform -rotate-1 shadow-hard border-2 border-black clip-notch hover:rotate-0 transition-transform duration-300 cursor-hover">
+                    <div class="flex justify-between items-start mb-6 border-b-2 border-black pb-4">
+                        <span
+                            class="font-bold uppercase text-xs tracking-widest bg-black text-white px-2 py-1">Manifesto
+                            v3.0</span>
+                        <div class="flex gap-1">
+                            <div class="w-3 h-3 rounded-full border border-black bg-brand-green"></div>
+                            <div class="w-3 h-3 rounded-full border border-black bg-white"></div>
+                        </div>
+                    </div>
+                    <h2 class="font-display text-4xl md:text-5xl uppercase leading-none text-left mb-6">
+                        Engineering<br>The Imagination.
+                    </h2>
+                    <p class="font-body text-lg leading-relaxed border-l-4 border-black pl-6 mb-8">
+                        The era of prompt engineering is over. Welcome to the age of <span
+                            class="font-bold bg-white px-1">Model Orchestration</span>. Join 3,000+ pioneers defining
+                        the next topology of synthetic intelligence.
+                    </p>
+                    <div
+                        class="flex flex-col md:flex-row gap-4 justify-between items-center border-t-2 border-black border-dashed pt-6 font-mono text-xs uppercase">
+                        <div class="flex items-center gap-2">
+                            <span class="animate-blink">_</span>
+                            <span>LOC: 40.7024° N, 73.9875° W</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <span>NYC / Navy Yard</span>
+                            <span>Aug 21-23</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div
+                class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 mix-blend-overlay text-white opacity-60">
+                <span class="uppercase text-[10px] tracking-widest">Initialize Scroll</span>
+                <div class="w-[1px] h-12 bg-white relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1/2 bg-brand-pink animate-[marquee_1s_linear_infinite]"
+                        style="animation-direction: normal;"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- SPONSORS MARQUEE (New) -->
+        <section class="bg-brand-dark border-y-2 border-white/20 py-8 overflow-hidden relative z-20">
+            <div class="flex w-max animate-marquee items-center gap-16 opacity-60 hover:opacity-100 transition-opacity">
+                <!-- Logos -->
+                <span class="text-3xl font-display text-white uppercase">Anthropic</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">Hugging Face</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">RunwayML</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">Stability AI</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">Midjourney</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">OpenAI</span>
+                <!-- Repeat -->
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">Anthropic</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">Hugging Face</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">RunwayML</span>
+            </div>
+        </section>
+
+        <!-- TICKET STUB HERO -->
+        <section id="about" class="bg-brand-orange py-24 px-4 relative overflow-hidden">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-0 shadow-hard-xl">
+                    <div
+                        class="lg:col-span-8 bg-brand-green p-8 md:p-16 relative overflow-hidden border-b-2 lg:border-b-0 lg:border-r-2 border-dashed border-white/40">
+                        <div
+                            class="absolute -top-6 right-1/2 lg:-right-6 lg:top-1/2 w-12 h-12 bg-brand-orange rounded-full z-10 translate-x-1/2 lg:translate-x-0 lg:-translate-y-1/2">
+                        </div>
+
+                        <div class="relative z-10 h-full flex flex-col justify-between min-h-[350px]">
+                            <div>
+                                <div
+                                    class="inline-block bg-white text-brand-green px-4 py-1 rounded font-bold text-xs uppercase mb-6 tracking-widest">
+                                    Limited Release: Batch 04</div>
+                                <h2 class="font-display text-6xl md:text-8xl text-white uppercase leading-[0.9]">
+                                    Global<br>Summit</h2>
+                            </div>
+                            <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-8 mt-12">
+                                <div class="text-white/80">
+                                    <p class="font-bold text-lg">New York City</p>
+                                    <p class="font-light text-sm opacity-60">Building 77, Navy Yard</p>
+                                </div>
+                                <div class="barcode w-48 opacity-50 bg-white mix-blend-overlay"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 bg-black relative group h-[400px] lg:h-auto overflow-hidden cursor-hover">
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop"
+                            class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 group-hover:opacity-80 transition-all duration-700 ease-in-out grayscale mix-blend-luminosity">
+                        <div class="absolute inset-0 bg-brand-green/30 mix-blend-color"></div>
+                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black to-transparent">
+                            <div class="text-white font-display text-2xl uppercase">Seats Remaining</div>
+                            <div class="flex justify-between text-xs font-mono text-brand-pink mb-1">
+                                <span>84% Sold</span>
+                                <span>42/300 Left</span>
+                            </div>
+                            <div class="h-2 w-full bg-white/20">
+                                <div class="h-full w-[84%] bg-brand-pink"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRACKS SECTION -->
+        <section id="tracks" class="bg-brand-light py-24 px-4 bg-grid-black border-y-4 border-black">
+            <div class="max-w-[1400px] mx-auto">
+                <div class="flex flex-col md:flex-row items-end justify-between mb-16 px-4">
+                    <h2 class="font-display text-6xl md:text-8xl text-black uppercase leading-[0.8]">
+                        Curated<br><span class="text-brand-orange">Tracks</span>
+                    </h2>
+                    <p class="max-w-sm text-right font-medium mt-6 md:mt-0 opacity-70">
+                        Deep dives into specific verticals of the generative landscape.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border-2 border-black">
+                    <!-- Track 1 -->
+                    <div
+                        class="group border-b-2 md:border-b-0 md:border-r-2 border-black p-8 hover:bg-black hover:text-white transition-colors cursor-hover min-h-[300px] flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-display text-4xl uppercase mb-4">Neural<br>Architectures</h3>
+                            <div
+                                class="w-8 h-8 bg-brand-pink border border-black flex items-center justify-center text-black font-bold">
+                                01</div>
+                        </div>
+                        <div>
+                            <p class="opacity-70 text-sm leading-relaxed mb-6">Exploring Liquid Neural Networks,
+                                Diffusion Transformers, and the next generation of model topology.</p>
+                            <div
+                                class="inline-block text-xs font-bold uppercase border border-current px-3 py-1 bg-transparent group-hover:bg-white group-hover:text-black">
+                                Technical</div>
+                        </div>
+                    </div>
+
+                    <!-- Track 2 -->
+                    <div
+                        class="group border-b-2 md:border-b-0 md:border-r-2 border-black p-8 hover:bg-brand-orange transition-colors cursor-hover min-h-[300px] flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-display text-4xl uppercase mb-4">Creative<br>Coding</h3>
+                            <div
+                                class="w-8 h-8 bg-white border border-black flex items-center justify-center text-black font-bold">
+                                02</div>
+                        </div>
+                        <div>
+                            <p class="opacity-70 text-sm leading-relaxed mb-6">From WebGL shaders to p5.js generative
+                                systems. The art of writing code that paints in real-time.</p>
+                            <div
+                                class="inline-block text-xs font-bold uppercase border border-current px-3 py-1 bg-transparent group-hover:bg-white group-hover:text-black">
+                                Design</div>
+                        </div>
+                    </div>
+
+                    <!-- Track 3 -->
+                    <div
+                        class="group p-8 hover:bg-brand-pink transition-colors cursor-hover min-h-[300px] flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-display text-4xl uppercase mb-4">Ethics &<br>Alignment</h3>
+                            <div
+                                class="w-8 h-8 bg-brand-green border border-black flex items-center justify-center text-white font-bold">
+                                03</div>
+                        </div>
+                        <div>
+                            <p class="opacity-70 text-sm leading-relaxed mb-6">Navigating copyright, bias, and the
+                                sociological impact of synthetic media at scale.</p>
+                            <div
+                                class="inline-block text-xs font-bold uppercase border border-current px-3 py-1 bg-transparent group-hover:bg-white group-hover:text-black">
+                                Society</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SPEAKERS SECTION (New Content) -->
+        <section id="speakers" class="bg-brand-light pb-24 pt-12 px-4 border-b-4 border-black">
+            <div class="max-w-[1400px] mx-auto">
+                <div class="flex justify-between items-end mb-12 px-4">
+                    <h2 class="font-display text-6xl uppercase text-black">Headliners</h2>
+                    <div class="flex gap-2">
+                        <button
+                            class="w-10 h-10 border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors cursor-hover">←</button>
+                        <button
+                            class="w-10 h-10 border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors cursor-hover">→</button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto hide-scrollbar pb-8">
+                    <div class="flex gap-6 w-max px-4">
+                        <!-- Speaker 1 -->
+                        <div class="w-[320px] group cursor-hover">
+                            <div
+                                class="h-[400px] bg-gray-200 border-2 border-black relative overflow-hidden clip-corner-cut mb-4">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop"
+                                    class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                                <div
+                                    class="absolute bottom-0 left-0 bg-brand-pink px-3 py-1 border-t border-r border-black font-bold text-xs uppercase">
+                                    Keynote</div>
+                            </div>
+                            <h3
+                                class="font-display text-3xl uppercase leading-none mb-1 group-hover:text-brand-orange transition-colors">
+                                Dr. Elena<br>Voss</h3>
+                            <p class="font-mono text-xs uppercase opacity-60">Chief Scientist, DeepMind</p>
+                        </div>
+
+                        <!-- Speaker 2 -->
+                        <div class="w-[320px] group cursor-hover">
+                            <div
+                                class="h-[400px] bg-gray-200 border-2 border-black relative overflow-hidden clip-corner-cut mb-4">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop"
+                                    class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                                <div
+                                    class="absolute bottom-0 left-0 bg-brand-orange px-3 py-1 border-t border-r border-black font-bold text-xs uppercase">
+                                    Workshop</div>
+                            </div>
+                            <h3
+                                class="font-display text-3xl uppercase leading-none mb-1 group-hover:text-brand-orange transition-colors">
+                                Marcus<br>Chen</h3>
+                            <p class="font-mono text-xs uppercase opacity-60">Creative Director, Pentagram</p>
+                        </div>
+
+                        <!-- Speaker 3 -->
+                        <div class="w-[320px] group cursor-hover">
+                            <div
+                                class="h-[400px] bg-gray-200 border-2 border-black relative overflow-hidden clip-corner-cut mb-4">
+                                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop"
+                                    class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                                <div
+                                    class="absolute bottom-0 left-0 bg-brand-green text-white px-3 py-1 border-t border-r border-black font-bold text-xs uppercase">
+                                    Panel</div>
+                            </div>
+                            <h3
+                                class="font-display text-3xl uppercase leading-none mb-1 group-hover:text-brand-orange transition-colors">
+                                Sarah<br>Jenkins</h3>
+                            <p class="font-mono text-xs uppercase opacity-60">VP of AI, Adobe</p>
+                        </div>
+
+                        <!-- Speaker 4 -->
+                        <div class="w-[320px] group cursor-hover">
+                            <div
+                                class="h-[400px] bg-gray-200 border-2 border-black relative overflow-hidden clip-corner-cut mb-4">
+                                <img src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?q=80&w=1887&auto=format&fit=crop"
+                                    class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                                <div
+                                    class="absolute bottom-0 left-0 bg-white px-3 py-1 border-t border-r border-black font-bold text-xs uppercase">
+                                    Demo</div>
+                            </div>
+                            <h3
+                                class="font-display text-3xl uppercase leading-none mb-1 group-hover:text-brand-orange transition-colors">
+                                Leo<br>Banks</h3>
+                            <p class="font-mono text-xs uppercase opacity-60">Founder, Runway</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AGENDA -->
+        <section id="agenda" class="bg-brand-pink py-24 px-4 bg-grid-black">
+            <div class="max-w-5xl mx-auto bg-white border-2 border-black shadow-hard">
+                <div class="flex border-b-2 border-black">
+                    <button
+                        class="flex-1 py-6 text-center font-display text-2xl uppercase bg-black text-white hover:bg-black/90 cursor-hover">Day
+                        01</button>
+                    <button
+                        class="flex-1 py-6 text-center font-display text-2xl uppercase hover:bg-brand-orange transition-colors cursor-hover">Day
+                        02</button>
+                    <button
+                        class="flex-1 py-6 text-center font-display text-2xl uppercase hover:bg-brand-orange transition-colors cursor-hover">Day
+                        03</button>
+                </div>
+
+                <div class="p-8 border-b-2 border-black flex justify-between items-center bg-brand-light">
+                    <h2 class="font-display text-3xl md:text-4xl uppercase">Opening & Fundamentals</h2>
+                    <span class="font-bold text-xs uppercase border border-black px-2 py-1 bg-white">Aug 21</span>
+                </div>
+
+                <div class="divide-y-2 divide-black">
+                    <!-- Row -->
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-12 group hover:bg-brand-orange/10 transition-colors cursor-hover">
+                        <div class="md:col-span-3 p-6 font-bold font-mono text-sm opacity-60">09:00 AM</div>
+                        <div class="md:col-span-6 p-6 border-l-0 md:border-l-2 border-black">
+                            <h3 class="font-display text-2xl uppercase mb-2">Opening Ceremony</h3>
+                            <p class="text-sm leading-relaxed">Introduction to the state of Generative AI in 2026. The
+                                shift from prompt engineering to model orchestration.</p>
+                        </div>
+                        <div
+                            class="md:col-span-3 p-6 border-l-0 md:border-l-2 border-black flex items-center justify-end md:justify-center">
+                            <span class="bg-black text-white text-[10px] uppercase font-bold px-2 py-1">Main Hall</span>
+                        </div>
+                    </div>
+                    <!-- Row -->
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-12 group hover:bg-brand-orange/10 transition-colors cursor-hover">
+                        <div class="md:col-span-3 p-6 font-bold font-mono text-sm opacity-60">10:30 AM</div>
+                        <div class="md:col-span-6 p-6 border-l-0 md:border-l-2 border-black">
+                            <h3 class="font-display text-2xl uppercase mb-2">Neural Architectures</h3>
+                            <p class="text-sm leading-relaxed">Deep dive into liquid neural networks and their
+                                application in real-time creative coding environments.</p>
+                        </div>
+                        <div
+                            class="md:col-span-3 p-6 border-l-0 md:border-l-2 border-black flex items-center justify-end md:justify-center">
+                            <span
+                                class="border border-black text-black text-[10px] uppercase font-bold px-2 py-1">Workshop
+                                A</span>
+                        </div>
+                    </div>
+                    <!-- Row -->
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-12 group hover:bg-brand-green/10 transition-colors cursor-hover">
+                        <div class="md:col-span-3 p-6 font-bold font-mono text-sm opacity-60">12:00 PM</div>
+                        <div class="md:col-span-6 p-6 border-l-0 md:border-l-2 border-black">
+                            <h3 class="font-display text-2xl uppercase mb-2 text-brand-green">Networking Lunch</h3>
+                            <p class="text-sm leading-relaxed">Categorized seating by tech stack. Vegan and Gluten-free
+                                options available.</p>
+                        </div>
+                        <div
+                            class="md:col-span-3 p-6 border-l-0 md:border-l-2 border-black flex items-center justify-end md:justify-center">
+                            <span
+                                class="bg-brand-green text-white text-[10px] uppercase font-bold px-2 py-1">Courtyard</span>
+                        </div>
+                    </div>
+                    <!-- Row (Added) -->
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-12 group hover:bg-brand-orange/10 transition-colors cursor-hover">
+                        <div class="md:col-span-3 p-6 font-bold font-mono text-sm opacity-60">01:30 PM</div>
+                        <div class="md:col-span-6 p-6 border-l-0 md:border-l-2 border-black">
+                            <h3 class="font-display text-2xl uppercase mb-2">Generative UI Systems</h3>
+                            <p class="text-sm leading-relaxed">Building interfaces that design themselves in real-time.
+                                A hands-on look at the Vercel v0.dev engine.</p>
+                        </div>
+                        <div
+                            class="md:col-span-3 p-6 border-l-0 md:border-l-2 border-black flex items-center justify-end md:justify-center">
+                            <span
+                                class="bg-white border border-black text-black text-[10px] uppercase font-bold px-2 py-1">Studio
+                                B</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VENUE SECTION -->
+        <section id="venue" class="bg-white py-0 border-y-4 border-black">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <!-- Info Side -->
+                <div class="p-12 md:p-24 flex flex-col justify-center bg-brand-light">
+                    <div class="mb-8">
+                        <span
+                            class="bg-brand-black text-white px-2 py-1 text-xs font-bold uppercase tracking-widest">Location</span>
+                    </div>
+                    <h2 class="font-display text-6xl uppercase mb-8">Building 77<br>Navy Yard</h2>
+                    <p class="font-body text-lg leading-relaxed mb-8 max-w-md">
+                        A massive industrial cathedral repurposed for the digital age. 1 Million square feet of raw
+                        concrete and steel, located on the Brooklyn waterfront.
+                    </p>
+                    <div class="space-y-4 font-mono text-sm uppercase">
+                        <div class="flex items-center gap-4 group cursor-hover">
+                            <span
+                                class="w-8 h-8 bg-black text-white flex items-center justify-center font-bold group-hover:bg-brand-orange transition-colors">T</span>
+                            <span>NYC Ferry (Astoria Route)</span>
+                        </div>
+                        <div class="flex items-center gap-4 group cursor-hover">
+                            <span
+                                class="w-8 h-8 bg-black text-white flex items-center justify-center font-bold group-hover:bg-brand-orange transition-colors">B</span>
+                            <span>Shuttle from Atlantic Terminal</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CSS Map Side -->
+                <div
+                    class="bg-white p-4 overflow-hidden relative min-h-[500px] flex items-center justify-center bg-grid-black">
+                    <div
+                        class="grid grid-cols-10 gap-1 w-full max-w-md mx-auto transform rotate-45 scale-75 md:scale-100">
+                        <!-- Generating grid cells via simple HTML for visual effect -->
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell active-zone"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell active-zone"></div>
+                        <div class="map-grid-cell active-zone"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                    </div>
+
+                    <!-- Map Label -->
+                    <div class="absolute bottom-8 left-8 bg-white border border-black p-4 shadow-hard">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-3 h-3 bg-brand-orange animate-pulse"></div>
+                            <span class="font-bold text-xs uppercase">Main Stage</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-black"></div>
+                            <span class="font-bold text-xs uppercase">Workshops</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRICING TIERS -->
+        <section id="pricing" class="bg-brand-light py-24 px-4 bg-grid-black border-y-4 border-black">
+            <div class="max-w-[1400px] mx-auto">
+                <div class="flex flex-col md:flex-row items-end justify-between mb-16 px-4">
+                    <h2 class="font-display text-6xl md:text-8xl text-black uppercase leading-[0.8]">
+                        Choose Your<br><span class="text-brand-orange">Access</span>
+                    </h2>
+                    <p class="max-w-sm text-right font-medium mt-6 md:mt-0 opacity-70">
+                        Secure your spot at the intersection of creativity and logic.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+                    <!-- TIER 1 -->
+                    <div
+                        class="pricing-card bg-white border-2 border-black p-8 shadow-hard transition-all duration-300 flex flex-col relative overflow-hidden cursor-hover">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-10 font-display text-9xl leading-none -mr-8 -mt-4">
+                            01</div>
+                        <h3 class="font-display text-4xl uppercase mb-2">Virtual</h3>
+                        <div class="font-bold text-3xl mb-6">$199</div>
+                        <p class="text-sm border-b border-black pb-6 mb-6 opacity-70">For the global citizens connecting
+                            from the cloud.</p>
+                        <ul class="space-y-3 mb-8 text-sm font-bold flex-grow">
+                            <li class="flex gap-2"><span>✓</span> Live Stream Access</li>
+                            <li class="flex gap-2"><span>✓</span> Digital Goodie Bag</li>
+                            <li class="flex gap-2"><span>✓</span> Discord Community</li>
+                            <li class="text-gray-400 line-through">Workshop Access</li>
+                        </ul>
+                        <button
+                            class="w-full py-4 border-2 border-black font-bold uppercase hover:bg-black hover:text-white transition-colors">Select
+                            Tier</button>
+                    </div>
+
+                    <!-- TIER 2 -->
+                    <div
+                        class="pricing-card bg-brand-pink border-2 border-black p-8 shadow-hard transition-all duration-300 flex flex-col relative overflow-hidden transform md:-translate-y-8 z-10 cursor-hover">
+                        <div class="absolute top-0 right-0 bg-black text-white px-4 py-1 text-xs font-bold uppercase">
+                            Most Popular</div>
+                        <h3 class="font-display text-4xl uppercase mb-2">Standard</h3>
+                        <div class="font-bold text-3xl mb-6">$499</div>
+                        <p class="text-sm border-b border-black pb-6 mb-6 opacity-80">Full physical access to the 3-day
+                            summit.</p>
+                        <ul class="space-y-3 mb-8 text-sm font-bold flex-grow">
+                            <li class="flex gap-2"><span>✓</span> All Keynotes & Panels</li>
+                            <li class="flex gap-2"><span>✓</span> Expo Hall Access</li>
+                            <li class="flex gap-2"><span>✓</span> Lunch & Beverages</li>
+                            <li class="flex gap-2"><span>✓</span> Afterparty Entry</li>
+                        </ul>
+                        <button
+                            class="w-full py-4 bg-black text-white font-bold uppercase hover:bg-white hover:text-black border-2 border-black transition-colors">Select
+                            Tier</button>
+                    </div>
+
+                    <!-- TIER 3 -->
+                    <div
+                        class="pricing-card bg-white border-2 border-black p-8 shadow-hard transition-all duration-300 flex flex-col relative overflow-hidden cursor-hover">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-10 font-display text-9xl leading-none -mr-8 -mt-4">
+                            03</div>
+                        <h3 class="font-display text-4xl uppercase mb-2">VIP</h3>
+                        <div class="font-bold text-3xl mb-6">$899</div>
+                        <p class="text-sm border-b border-black pb-6 mb-6 opacity-70">The ultimate experience with
+                            exclusive perks.</p>
+                        <ul class="space-y-3 mb-8 text-sm font-bold flex-grow">
+                            <li class="flex gap-2"><span>✓</span> Everything in Standard</li>
+                            <li class="flex gap-2"><span>✓</span> Speaker Dinner Access</li>
+                            <li class="flex gap-2"><span>✓</span> Priority Seating</li>
+                            <li class="flex gap-2"><span>✓</span> 1-on-1 Mentorship</li>
+                        </ul>
+                        <button
+                            class="w-full py-4 border-2 border-black font-bold uppercase hover:bg-black hover:text-white transition-colors">Select
+                            Tier</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ SECTION -->
+        <section id="faq" class="bg-brand-green py-24 px-4 bg-grid-white border-b-4 border-black">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="font-display text-6xl text-white uppercase mb-12 text-center">Frequently<br>Asked Questions
+                </h2>
+
+                <div class="space-y-4">
+                    <!-- FAQ 1 -->
+                    <div class="faq-item bg-white border-2 border-black shadow-hard group cursor-pointer cursor-hover"
+                        onclick="this.classList.toggle('active')">
+                        <div class="p-6 flex justify-between items-center">
+                            <h3 class="font-display text-xl uppercase">Is this event beginner friendly?</h3>
+                            <div class="faq-icon text-2xl">+</div>
+                        </div>
+                        <div class="faq-content bg-brand-light border-t-2 border-black">
+                            <p class="p-6 text-sm leading-relaxed">Yes! While we have advanced tracks for veterans, "Day
+                                01" includes a dedicated foundation track designed to get you up to speed with the
+                                latest generative tools and concepts.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="faq-item bg-white border-2 border-black shadow-hard group cursor-pointer cursor-hover"
+                        onclick="this.classList.toggle('active')">
+                        <div class="p-6 flex justify-between items-center">
+                            <h3 class="font-display text-xl uppercase">Do I need to bring my own laptop?</h3>
+                            <div class="faq-icon text-2xl">+</div>
+                        </div>
+                        <div class="faq-content bg-brand-light border-t-2 border-black">
+                            <p class="p-6 text-sm leading-relaxed">For Workshop sessions, a laptop is required. We
+                                recommend a machine capable of running WebGL smoothly (M1/M2 Mac or equivalent PC with
+                                discrete GPU).</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="faq-item bg-white border-2 border-black shadow-hard group cursor-pointer cursor-hover"
+                        onclick="this.classList.toggle('active')">
+                        <div class="p-6 flex justify-between items-center">
+                            <h3 class="font-display text-xl uppercase">Are meals included in the ticket?</h3>
+                            <div class="faq-icon text-2xl">+</div>
+                        </div>
+                        <div class="faq-content bg-brand-light border-t-2 border-black">
+                            <p class="p-6 text-sm leading-relaxed">Standard and VIP tickets include breakfast, lunch,
+                                and unlimited coffee. Virtual tickets obviously do not include digital food (yet).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMMUNITY VOICES (TESTIMONIALS) -->
+        <section class="bg-brand-blue text-white py-24 overflow-hidden border-b-4 border-black">
+            <div class="max-w-[1400px] mx-auto px-6 mb-12">
+                <h2 class="font-display text-5xl uppercase mb-8">Community Voices</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="border border-white/20 p-8 hover:bg-white/5 transition-colors cursor-hover">
+                        <p class="font-body text-xl italic mb-6">"I came for the code, but stayed for the people.
+                            Confera 2025 completely changed how I approach generative UI."</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-brand-pink rounded-full"></div>
+                            <div>
+                                <div class="font-bold uppercase">Elena R.</div>
+                                <div class="text-xs opacity-60">Creative Technologist, Uber</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border border-white/20 p-8 hover:bg-white/5 transition-colors cursor-hover">
+                        <p class="font-body text-xl italic mb-6">"The workshops on liquid neural networks were
+                            mind-bending. Finally, practical applications for theory."</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-brand-orange rounded-full"></div>
+                            <div>
+                                <div class="font-bold uppercase">Marcus J.</div>
+                                <div class="text-xs opacity-60">Senior Dev, Google Creative Lab</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MARQUEE FOOTER -->
+        <section class="bg-black text-white py-12 overflow-hidden border-b-4 border-black">
+            <div class="flex gap-16 w-max animate-marquee">
+                <span class="text-6xl font-display text-transparent stroke-white"
+                    style="-webkit-text-stroke: 1px white;">GOOGLE</span>
+                <span class="text-6xl font-display text-brand-pink">OPENAI</span>
+                <span class="text-6xl font-display text-transparent stroke-white"
+                    style="-webkit-text-stroke: 1px white;">NVIDIA</span>
+                <span class="text-6xl font-display text-brand-orange">ANTHROPIC</span>
+                <span class="text-6xl font-display text-transparent stroke-white"
+                    style="-webkit-text-stroke: 1px white;">HUGGINGFACE</span>
+                <span class="text-6xl font-display text-brand-green">MIDJOURNEY</span>
+                <span class="text-6xl font-display text-transparent stroke-white"
+                    style="-webkit-text-stroke: 1px white;">STABILITY</span>
+                <!-- Duplicate for loop -->
+                <span class="text-6xl font-display text-transparent stroke-white"
+                    style="-webkit-text-stroke: 1px white;">GOOGLE</span>
+                <span class="text-6xl font-display text-brand-pink">OPENAI</span>
+                <span class="text-6xl font-display text-transparent stroke-white"
+                    style="-webkit-text-stroke: 1px white;">NVIDIA</span>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-brand-dark pt-32 pb-12 px-6">
+            <div class="max-w-[1400px] mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-start mb-24">
+                    <div class="mb-12 md:mb-0">
+                        <h2 class="text-white font-display text-5xl mb-6">Stay In The Loop</h2>
+                        <div class="flex border-b border-white/30 pb-2">
+                            <input type="email" placeholder="ENTER EMAIL ADDRESS"
+                                class="bg-transparent border-none outline-none text-white placeholder-white/50 w-64 font-mono text-sm focus:placeholder-white cursor-hover">
+                            <button
+                                class="text-brand-pink font-bold uppercase text-sm hover:text-white transition-colors cursor-hover">Subscribe</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-16 text-white/60 font-mono text-xs uppercase tracking-widest">
+                        <div class="flex flex-col gap-4"><a href="#"
+                                class="hover:text-white cursor-hover">Instagram</a><a href="#"
+                                class="hover:text-white cursor-hover">Twitter / X</a></div>
+                        <div class="flex flex-col gap-4"><a href="#" class="hover:text-white cursor-hover">Code of
+                                Conduct</a><a href="#" class="hover:text-white cursor-hover">Privacy Policy</a></div>
+                    </div>
+                </div>
+                <div class="border-t border-white/20 pt-8 flex justify-between items-center">
+                    <p class="text-white/40 text-[10px] uppercase">© 2026 Confera Inc. Brooklyn, NY.</p>
+                </div>
+                <h1
+                    class="font-display text-[20vw] text-center text-brand-pink leading-none opacity-10 select-none mt-[-5vw] pointer-events-none">
+                    CONFERA</h1>
+            </div>
+        </footer>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        // --- CUSTOM CURSOR LOGIC ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // --- WEBGL SETUP ---
+        const canvasContainer = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 4.5;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        canvasContainer.appendChild(renderer.domElement);
+
+        // --- LIQUID NOISE SHADER ---
+        const vertexShader = `
+            uniform float uTime;
+            varying vec2 vUv;
+            varying vec3 vNormal;
+            varying float vNoise;
+
+            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+            vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+            float snoise(vec3 v) {
+                const vec2  C = vec2(1.0/6.0, 1.0/3.0);
+                const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+                vec3 i  = floor(v + dot(v, C.yyy));
+                vec3 x0 = v - i + dot(i, C.xxx);
+                vec3 g = step(x0.yzx, x0.xyz);
+                vec3 l = 1.0 - g;
+                vec3 i1 = min( g.xyz, l.zxy );
+                vec3 i2 = max( g.xyz, l.zxy );
+                vec3 x1 = x0 - i1 + C.xxx;
+                vec3 x2 = x0 - i2 + C.yyy;
+                vec3 x3 = x0 - D.yyy;
+                i = mod289(i);
+                vec4 p = permute( permute( permute( i.z + vec4(0.0, i1.z, i2.z, 1.0 )) + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+                float n_ = 0.142857142857;
+                vec3  ns = n_ * D.wyz - D.xzx;
+                vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+                vec4 x_ = floor(j * ns.z);
+                vec4 y_ = floor(j - 7.0 * x_ );
+                vec4 x = x_ *ns.x + ns.yyyy;
+                vec4 y = y_ *ns.x + ns.yyyy;
+                vec4 h = 1.0 - abs(x) - abs(y);
+                vec4 b0 = vec4( x.xy, y.xy );
+                vec4 b1 = vec4( x.zw, y.zw );
+                vec4 s0 = floor(b0)*2.0 + 1.0;
+                vec4 s1 = floor(b1)*2.0 + 1.0;
+                vec4 sh = -step(h, vec4(0.0));
+                vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+                vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+                vec3 p0 = vec3(a0.xy,h.x);
+                vec3 p1 = vec3(a0.zw,h.y);
+                vec3 p2 = vec3(a1.xy,h.z);
+                vec3 p3 = vec3(a1.zw,h.w);
+                vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+                p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+                vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                m = m * m;
+                return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
+            }
+
+            void main() {
+                vUv = uv;
+                vNormal = normalize(normalMatrix * normal);
+                float noiseVal = snoise(position * 0.8 + uTime * 0.3);
+                vNoise = noiseVal;
+                vec3 newPos = position + normal * noiseVal * 0.4;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            uniform vec3 uColor1; uniform vec3 uColor2; uniform vec3 uColor3;
+            varying vec3 vNormal; varying float vNoise;
+
+            float dither8x8(vec2 position, float brightness) {
+                int x = int(mod(position.x, 8.0));
+                int y = int(mod(position.y, 8.0));
+                int index = x + y * 8;
+                float limit = fract(float(index) * 0.61803398875); 
+                return brightness < limit ? 0.0 : 1.0;
+            }
+
+            void main() {
+                vec3 lightPos = vec3(1.0, 1.0, 2.0);
+                float diffuse = max(dot(vNormal, normalize(lightPos)), 0.0);
+                float intensity = diffuse + (vNoise * 0.2) + 0.1;
+                
+                vec3 col = uColor1;
+                vec2 screenPos = gl_FragCoord.xy;
+                float d = dither8x8(screenPos, intensity);
+                
+                if (intensity > 0.6) { col = mix(uColor2, uColor3, d); }
+                else if (intensity > 0.3) { col = mix(uColor1, uColor2, d); }
+                else { col = uColor1 * d; }
+
+                gl_FragColor = vec4(col, 1.0);
+            }
+        `;
+
+        const uniforms = {
+            uTime: { value: 0 },
+            uColor1: { value: new THREE.Color('#004d30') },
+            uColor2: { value: new THREE.Color('#ff9ec6') },
+            uColor3: { value: new THREE.Color('#ff6b4a') }
+        };
+
+        const material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms, side: THREE.DoubleSide });
+        const blob = new THREE.Mesh(new THREE.SphereGeometry(2.2, 128, 128), material);
+        scene.add(blob);
+
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+            uniforms.uTime.value = t;
+            blob.rotation.y = t * 0.1;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- GSAP ANIMATIONS ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Color shift based on section
+        const sections = [
+            { id: "#tracks", c1: '#f4f4f0', c2: '#004d30', c3: '#ff6b4a' },
+            { id: "#pricing", c1: '#f4f4f0', c2: '#ff9ec6', c3: '#000000' },
+            { id: "#agenda", c1: '#ff9ec6', c2: '#ff6b4a', c3: '#ffffff' },
+            { id: "#venue", c1: '#ffffff', c2: '#000000', c3: '#ffffff' },
+            { id: "#faq", c1: '#004d30', c2: '#ffffff', c3: '#004d30' }
+        ];
+
+        sections.forEach(section => {
+            ScrollTrigger.create({
+                trigger: section.id,
+                start: "top center",
+                end: "bottom center",
+                onEnter: () => {
+                    gsap.to(uniforms.uColor1.value, { r: new THREE.Color(section.c1).r, g: new THREE.Color(section.c1).g, b: new THREE.Color(section.c1).b, duration: 1 });
+                    gsap.to(uniforms.uColor2.value, { r: new THREE.Color(section.c2).r, g: new THREE.Color(section.c2).g, b: new THREE.Color(section.c2).b, duration: 1 });
+                    gsap.to(uniforms.uColor3.value, { r: new THREE.Color(section.c3).r, g: new THREE.Color(section.c3).g, b: new THREE.Color(section.c3).b, duration: 1 });
+                },
+                onLeaveBack: () => {
+                    gsap.to(uniforms.uColor1.value, { r: new THREE.Color('#004d30').r, g: new THREE.Color('#004d30').g, b: new THREE.Color('#004d30').b, duration: 1 });
+                    gsap.to(uniforms.uColor2.value, { r: new THREE.Color('#ff9ec6').r, g: new THREE.Color('#ff9ec6').g, b: new THREE.Color('#ff9ec6').b, duration: 1 });
+                    gsap.to(uniforms.uColor3.value, { r: new THREE.Color('#ff6b4a').r, g: new THREE.Color('#ff6b4a').g, b: new THREE.Color('#ff6b4a').b, duration: 1 });
+                }
+            });
+        });
+
+        gsap.to(blob.position, {
+            y: -1.5,
+            scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 2 }
+        });
+
+        gsap.from(".pricing-card", {
+            y: 100, opacity: 0, stagger: 0.1, duration: 0.8,
+            scrollTrigger: { trigger: "#pricing", start: "top 70%" }
+        });
+
+        gsap.from(".faq-item", {
+            x: -50, opacity: 0, stagger: 0.1, duration: 0.5,
+            scrollTrigger: { trigger: "#faq", start: "top 70%" }
+        });
+    </script>
+</body>
+
+</html>

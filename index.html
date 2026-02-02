@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Digital Ministry | Equipping The Church</title>
+    <meta name="description"
+        content="Equipping churches and ministry leaders with professional design resources and tools for digital ministry. Graphics, Stock Photos, SZN Kits, and more.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Config -->
+    <script src="./js/tailwind.config.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body class="font-body text-brand-dark antialiased selection:bg-brand-pink selection:text-brand-dark">
+
+    <div id="cursor"></div>
+    <div class="noise-overlay"></div>
+    <div class="scanline-overlay"></div>
+    <div id="webgl-canvas"></div>
+
+    <div class="content-wrapper">
+
+        <!-- NAV -->
+        <nav
+            class="fixed top-0 w-full z-50 px-6 py-4 bg-black/95 backdrop-blur-sm border-b border-white/10 text-white transition-all duration-300 shadow-xl">
+            <div class="max-w-[1400px] mx-auto flex justify-between items-center">
+                <a href="#" class="cursor-hover flex items-center gap-3 group">
+                    <img src="./public/LOGO_GA_PETJAH.webp" alt="The Digital Ministry"
+                        class="h-10 w-auto object-contain">
+                    <span
+                        class="font-display text-xl md:text-2xl uppercase tracking-tighter group-hover:text-brand-pink transition-colors">The
+                        Digital Ministry<span class="text-brand-pink">.</span></span>
+                </a>
+                <div class="hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest items-center">
+                    <a href="#about"
+                        class="nav-link relative cursor-hover hover:text-brand-pink transition-colors">About</a>
+                    <a href="#strategy"
+                        class="nav-link relative cursor-hover hover:text-brand-orange transition-colors">Strategy</a>
+
+                    <!-- Resources Dropdown -->
+                    <div class="relative group">
+                        <button
+                            class="nav-link relative cursor-hover hover:text-brand-pink transition-colors flex items-center gap-1 focus:outline-none">
+                            Resources
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                                stroke-linejoin="round" class="opacity-70 group-hover:rotate-180 transition-transform">
+                                <path d="m6 9 6 6 6-6" />
+                            </svg>
+                        </button>
+                        <!-- Dropdown Menu -->
+                        <div
+                            class="absolute top-full left-1/2 -translate-x-1/2 pt-6 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:-translate-y-2 z-50">
+                            <div
+                                class="bg-black border border-white/20 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] flex flex-col">
+                                <a href="#"
+                                    class="px-6 py-4 hover:bg-white hover:text-black border-b border-white/10 transition-colors block text-center">Design
+                                    Asset</a>
+                                <a href="#"
+                                    class="px-6 py-4 hover:bg-white hover:text-black border-b border-white/10 transition-colors block text-center">Devotional</a>
+                                <a href="#"
+                                    class="px-6 py-4 hover:bg-white hover:text-black transition-colors block text-center">Others</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="#partners"
+                        class="nav-link relative cursor-hover hover:text-brand-green transition-colors">Team</a>
+                    <a href="#roadmap"
+                        class="nav-link relative cursor-hover hover:text-brand-pink transition-colors">Events</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleDonateModal()"
+                        class="bg-brand-pink text-black px-4 py-2 md:px-6 md:py-2 font-bold uppercase text-xs tracking-widest hover:bg-white transition-all border border-black hover:border-brand-pink cursor-hover shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] hover:translate-x-[2px] hover:translate-y-[2px]">
+                        Donate
+                    </button>
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()"
+                        class="md:hidden text-white hover:text-brand-pink transition-colors p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Overlay -->
+            <div id="mobile-menu"
+                class="fixed inset-0 bg-black z-[60] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-300">
+                <button onclick="toggleMobileMenu()"
+                    class="absolute top-6 right-6 text-white hover:text-brand-pink p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="flex flex-col gap-8 text-center uppercase font-display text-3xl">
+                    <a href="#about" onclick="toggleMobileMenu()"
+                        class="hover:text-brand-pink transition-colors">About</a>
+                    <a href="#strategy" onclick="toggleMobileMenu()"
+                        class="hover:text-brand-orange transition-colors">Strategy</a>
+
+                    <!-- Mobile Resources Group -->
+                    <div class="flex flex-col gap-4 items-center border-y border-white/10 py-4 my-2">
+                        <span class="text-brand-pink text-xl tracking-widest font-mono opacity-70">/// Resources</span>
+                        <a href="#" class="text-2xl hover:text-brand-pink transition-colors">Design Asset</a>
+                        <a href="#" class="text-2xl hover:text-brand-pink transition-colors">Devotional</a>
+                        <a href="#" class="text-2xl hover:text-brand-pink transition-colors">Others</a>
+                    </div>
+
+                    <a href="#partners" onclick="toggleMobileMenu()"
+                        class="hover:text-brand-green transition-colors">Team</a>
+                    <a href="#roadmap" onclick="toggleMobileMenu()"
+                        class="hover:text-brand-pink transition-colors">Events</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- HERO SECTION -->
+        <header class="relative min-h-screen flex flex-col justify-center items-center pt-24 pb-10 px-4">
+            <!-- Main Title Group -->
+            <div class="relative z-10 text-center mix-blend-overlay">
+                <div class="font-mono text-xs md:text-sm uppercase tracking-[0.3em] text-white mb-4 animate-pulse">
+                    /// On Internet As It Is In Heaven - 2024/2025
+                </div>
+                <h1 class="font-display text-[18vw] leading-[0.85] text-brand-light opacity-90 tracking-tighter">
+                    THE DIGITAL<br>MINISTRY
+                </h1>
+            </div>
+
+            <!-- Hero HUD / Info Box -->
+            <div class="relative z-20 mt-8 max-w-3xl w-full">
+                <div
+                    class="bg-brand-pink p-8 md:p-12 transform -rotate-1 shadow-hard border-2 border-black clip-notch hover:rotate-0 transition-transform duration-300 cursor-hover">
+                    <div class="flex justify-between items-start mb-6 border-b-2 border-black pb-4">
+                        <span class="font-bold uppercase text-xs tracking-widest bg-black text-white px-2 py-1">Identity
+                            Profile</span>
+                        <div class="flex gap-1">
+                            <div class="w-3 h-3 rounded-full border border-black bg-brand-green"></div>
+                            <div class="w-3 h-3 rounded-full border border-black bg-white"></div>
+                        </div>
+                    </div>
+                    <h2 class="font-display text-4xl md:text-5xl uppercase leading-none text-left mb-6">
+                        Equip &<br>Empower
+                    </h2>
+                    <p class="font-body text-xl leading-relaxed border-l-4 border-black pl-6 mb-8">
+                        The Digital Ministry is a digital ministry initiative designed <span
+                            class="font-bold bg-white px-1">to equip and empower</span> the digital ministry workers to
+                        navigate their ministry online and <span class="font-bold bg-white px-1">to reach the digital
+                            natives</span> for the Church as we pray to see His Kingdom come, His will be done <i>On
+                            Internet As It Is in Heaven</i>.
+                    </p>
+                    <div
+                        class="flex flex-col md:flex-row gap-4 justify-between items-center border-t-2 border-black border-dashed pt-6 font-mono text-sm uppercase">
+                        <div class="flex items-center gap-2">
+                            <span class="animate-blink">_</span>
+                            <a href="http://thedigitalministry.org" class="hover:underline">thedigitalministry.org</a>
+                        </div>
+                        <div class="flex gap-4">
+                            <a href="http://www.instagram.com/thedigitalministry/"
+                                class="hover:underline">@thedigitalministry</a>
+                            <a href="http://wa.me/+6285395144111" class="hover:underline">+62 853-9514-4111</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div
+                class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 mix-blend-overlay text-white opacity-60">
+                <span class="uppercase text-[10px] tracking-widest">Scroll to Explore</span>
+                <div class="w-[1px] h-12 bg-white relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1/2 bg-brand-pink animate-marquee"
+                        style="animation-direction: normal;"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- SERVICES MARQUEE -->
+        <section class="bg-brand-dark border-y-2 border-white/20 py-8 overflow-hidden relative z-20">
+            <div class="flex w-max animate-marquee items-center gap-16 opacity-60 hover:opacity-100 transition-opacity">
+                <span class="text-3xl font-display text-white uppercase">Social Graphics</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">Stock Photos</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">SZN Kits</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">Screen Slides</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">Shorts Tool</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">Scheduler</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">Social Graphics</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">Stock Photos</span>
+                <span class="w-2 h-2 bg-brand-pink rounded-full"></span>
+                <span class="text-3xl font-display text-white uppercase">SZN Kits</span>
+            </div>
+        </section>
+
+        <!-- VISION & MISSION (Ex About) -->
+        <section id="about" class="bg-brand-orange py-24 px-4 relative overflow-hidden">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-0 shadow-hard-xl">
+                    <div
+                        class="lg:col-span-8 bg-brand-pink p-8 md:p-16 relative overflow-hidden border-b-2 lg:border-b-0 lg:border-r-2 border-dashed border-black/40 group text-black">
+
+                        <div
+                            class="absolute -top-6 right-1/2 lg:-right-6 lg:top-1/2 w-12 h-12 bg-black/10 rounded-full z-10 translate-x-1/2 lg:translate-x-0 lg:-translate-y-1/2">
+                        </div>
+                        <div class="relative z-10 h-full flex flex-col justify-between min-h-[350px]">
+                            <div>
+                                <div
+                                    class="inline-block bg-black text-white px-4 py-1 font-bold text-xs uppercase mb-6 tracking-widest border border-black">
+                                    IDENTITY PROFILE
+                                </div>
+                                <h2 class="font-display text-5xl md:text-7xl text-black uppercase leading-[0.9] mb-8">
+                                    Equip &<br>Empower
+                                </h2>
+                                <div class="w-1 h-24 bg-black mb-8"></div>
+                                <p class="text-base md:text-lg leading-relaxed max-w-2xl font-medium">
+                                    The Digital Ministry is a digital ministry initiative designed
+                                    <span class="bg-white px-1 font-bold">to equip and empower</span>
+                                    the digital ministry workers to navigate their ministry online and
+                                    <span class="bg-white px-1 font-bold">to reach the digital natives</span>
+                                    for the Church as we pray to see His Kingdom come, His will be done
+                                    <span class="italic">On Internet As It Is in Heaven.</span>
+                                </p>
+                            </div>
+
+                            <!-- Featured Image -->
+                            <img src="./public/1.webp"
+                                class="w-full h-auto md:h-64 object-cover my-8 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] md:grayscale md:group-hover:grayscale-0 md:transition-all md:duration-700"
+                                alt="Ministry Atmosphere">
+
+                            <div class="border-t border-black/20 pt-4 mt-8">
+                                <p class="text-[10px] font-mono uppercase tracking-widest text-black/60 text-right">
+                                    ------------------ THEDIGITALMINISTRY.ORG
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="lg:col-span-4 bg-black relative group h-auto overflow-hidden cursor-hover p-8 text-white">
+                        <h3 class="font-display text-3xl uppercase mb-6 text-brand-pink">Core Values</h3>
+                        <ul class="space-y-6">
+                            <li>
+                                <div class="font-bold text-brand-orange uppercase text-sm mb-1 flex items-center gap-2">
+                                    <div class="w-2 h-2 bg-brand-orange"></div> Christ-centered
+                                </div>
+                                <p class="text-sm opacity-80 leading-relaxed">Acknowledges God's sovereignty, the
+                                    authority of the Bible, Lordship of Jesus, and power of the Holy Spirit. All for
+                                    God's glory.</p>
+                            </li>
+                            <li>
+                                <div class="font-bold text-brand-orange uppercase text-sm mb-1 flex items-center gap-2">
+                                    <div class="w-2 h-2 bg-brand-orange"></div> Cutting Edge
+                                </div>
+                                <p class="text-sm opacity-80 leading-relaxed">Committed to continue learning. Not just
+                                    reacting but leading and innovating.</p>
+                            </li>
+                            <li>
+                                <div class="font-bold text-brand-orange uppercase text-sm mb-1 flex items-center gap-2">
+                                    <div class="w-2 h-2 bg-brand-orange"></div> Digital Integrity
+                                </div>
+                                <p class="text-sm opacity-80 leading-relaxed">Pursuing holiness in the real world means
+                                    pursuing a holy life in cyberspace.</p>
+                            </li>
+                            <li>
+                                <div class="font-bold text-brand-orange uppercase text-sm mb-1 flex items-center gap-2">
+                                    <div class="w-2 h-2 bg-brand-orange"></div> Gospel-driven
+                                </div>
+                                <p class="text-sm opacity-80 leading-relaxed">Driven by the Bible. Not fame, trends, or
+                                    personal ambitions.</p>
+                            </li>
+                            <li>
+                                <div class="font-bold text-brand-orange uppercase text-sm mb-1 flex items-center gap-2">
+                                    <div class="w-2 h-2 bg-brand-orange"></div> Spirit-led
+                                </div>
+                                <p class="text-sm opacity-80 leading-relaxed">Led by the will of the Spirit, a heart
+                                    ready to be led, taught, and formed.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STRATEGY (Ex Resources) -->
+        <section id="strategy" class="bg-brand-light py-24 px-4 bg-grid-black border-y-4 border-black">
+            <div class="max-w-[1400px] mx-auto">
+                <div class="flex flex-col md:flex-row items-end justify-between mb-16 px-4">
+                    <h2 class="font-display text-5xl md:text-7xl text-black uppercase leading-[0.9]">
+                        Community-Based<br><span class="text-brand-orange">Digital Ministry</span>
+                    </h2>
+                    <p class="max-w-lg text-right font-medium mt-6 md:mt-0 opacity-80 text-base leading-relaxed">
+                        Building digital ministry by focusing on Community Building and Development. Connecting digital
+                        ministers with existing analog ministries.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border-2 border-black">
+                    <!-- Ministry Incubator -->
+                    <div
+                        class="group border-b-2 md:border-b-0 md:border-r-2 border-black p-8 hover:bg-black hover:text-white transition-colors cursor-hover min-h-[300px] flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-display text-3xl uppercase mb-4">Ministry<br>Incubator</h3>
+                            <div
+                                class="w-8 h-8 bg-brand-pink border border-black flex items-center justify-center text-black font-bold">
+                                01</div>
+                        </div>
+                        <div>
+                            <p class="opacity-70 text-sm leading-relaxed mb-6">Accommodating digital ministers outside
+                                and within church organizations.</p>
+                            <div class="space-y-4">
+                                <div class="relative group/card">
+                                    <img src="./public/ministry incubator/2.webp"
+                                        class="w-full h-24 object-cover border border-current mb-2 filter md:grayscale md:group-hover/card:grayscale-0 transition-all">
+                                    <div class="font-bold text-xs uppercase flex items-center gap-2">
+                                        <div class="w-2 h-2 bg-brand-orange"></div> Feeds
+                                    </div>
+                                    <p class="text-[10px] opacity-60 leading-tight mt-1">Faith Empowered Embracing
+                                        Digital Space.</p>
+                                </div>
+                                <div class="relative group/card">
+                                    <img src="./public/ministry incubator/Creative Collective (Soon).jpg"
+                                        class="w-full h-24 object-cover border border-current mb-2 filter md:grayscale md:group-hover/card:grayscale-0 transition-all">
+                                    <div class="font-bold text-xs uppercase flex items-center gap-2">
+                                        <div class="w-2 h-2 bg-brand-pink"></div> Creative Collective <span
+                                            class="text-[8px] bg-brand-pink text-black px-1 ml-1 font-bold">SOON</span>
+                                    </div>
+                                    <p class="text-[10px] opacity-60 leading-tight mt-1">For creatives: designers, video
+                                        editors, animators.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Church Dev -->
+                    <div
+                        class="group border-b-2 md:border-b-0 md:border-r-2 border-black p-8 hover:bg-brand-orange transition-colors cursor-hover min-h-[300px] flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-display text-3xl uppercase mb-4">Church Development<br>Ministry</h3>
+                            <div
+                                class="w-8 h-8 bg-white border border-black flex items-center justify-center text-black font-bold">
+                                02</div>
+                        </div>
+                        <div>
+                            <p class="opacity-70 text-sm leading-relaxed mb-6">Communities focusing on each category of
+                                ministry within the scope of the church and faith community.</p>
+                            <div class="space-y-4">
+                                <div class="relative group/card">
+                                    <img src="./public/Church Development Ministry/TDM for Church (Soon).png"
+                                        class="w-full h-24 object-cover border border-current mb-2 filter md:grayscale md:group-hover/card:grayscale-0 transition-all">
+                                    <div class="font-bold text-xs uppercase flex items-center gap-2">
+                                        <div class="w-2 h-2 bg-black ring-1 ring-white"></div> TDM for Church <span
+                                            class="text-[8px] bg-black text-white px-1 ml-1 font-bold">SOON</span>
+                                    </div>
+                                </div>
+                                <div class="relative group/card">
+                                    <img src="./public/Church Development Ministry/TDM for Youth Ministry (Soon).png"
+                                        class="w-full h-24 object-cover border border-current mb-2 filter md:grayscale md:group-hover/card:grayscale-0 transition-all">
+                                    <div class="font-bold text-xs uppercase flex items-center gap-2">
+                                        <div class="w-2 h-2 bg-black ring-1 ring-white"></div> TDM for Youth <span
+                                            class="text-[8px] bg-black text-white px-1 ml-1 font-bold">SOON</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Other Ministry -->
+                    <div
+                        class="group p-8 hover:bg-brand-pink transition-colors cursor-hover min-h-[300px] flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-display text-3xl uppercase mb-4">Other<br>Ministry</h3>
+                            <div
+                                class="w-8 h-8 bg-brand-green border border-black flex items-center justify-center text-white font-bold">
+                                03</div>
+                        </div>
+                        <div>
+                            <p class="opacity-70 text-sm leading-relaxed mb-6">Resources Sharing (Templates, Content
+                                Plans) and Training & Workshops.</p>
+                            <div class="space-y-4">
+                                <div class="relative group/card">
+                                    <img src="./public/other ministry/Resources Sharing.webp"
+                                        class="w-full h-24 object-cover border border-current mb-2 filter md:grayscale md:group-hover/card:grayscale-0 transition-all">
+                                    <div class="font-bold text-xs uppercase flex items-center gap-2">
+                                        <div class="w-2 h-2 bg-white ring-1 ring-black"></div> Free Resources
+                                    </div>
+                                    <p class="text-[10px] opacity-60 leading-tight mt-1">Free content plans, strategies,
+                                        and design templates.</p>
+                                </div>
+                                <div class="relative group/card">
+                                    <img src="./public/other ministry/Training & Workshop.webp"
+                                        class="w-full h-24 object-cover border border-current mb-2 filter md:grayscale md:group-hover/card:grayscale-0 transition-all">
+                                    <div class="font-bold text-xs uppercase flex items-center gap-2">
+                                        <div class="w-2 h-2 bg-white ring-1 ring-black"></div> Training & Workshop
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CORE TEAM (Ex Partners) -->
+        <section id="partners" class="bg-brand-light pb-24 pt-12 px-4 border-b-4 border-black">
+            <div class="max-w-[1400px] mx-auto">
+                <div class="flex justify-between items-end mb-12 px-4">
+                    <h2 class="font-display text-6xl uppercase text-black">Core Team</h2>
+                    <div class="flex gap-2">
+                        <button
+                            class="w-10 h-10 border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors cursor-hover">←</button>
+                        <button
+                            class="w-10 h-10 border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors cursor-hover">→</button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto hide-scrollbar pb-8">
+                    <div class="flex gap-6 w-max px-4">
+                        <!-- Larry -->
+                        <div class="w-[320px] group cursor-hover">
+                            <div
+                                class="h-[400px] bg-gray-200 border-2 border-black relative overflow-hidden clip-corner-cut mb-4">
+                                <img src="./public/core team/Larry Christofal.webp"
+                                    class="w-full h-full object-cover md:grayscale md:group-hover:grayscale-0 transition-all duration-500">
+                                <div
+                                    class="absolute bottom-0 left-0 bg-brand-pink px-3 py-1 border-t border-r border-black font-bold text-xs uppercase">
+                                    Co-Founder</div>
+                            </div>
+                            <h3
+                                class="font-display text-3xl uppercase leading-none mb-1 group-hover:text-brand-orange transition-colors">
+                                Larry<br>Christofal</h3>
+                            <div class="flex gap-2 mt-2">
+                                <a href="http://www.instagram.com/larrychrstfl"
+                                    class="font-mono text-xs uppercase opacity-60 hover:opacity-100">@larrychrstfl</a>
+                            </div>
+                        </div>
+                        <!-- Efraim -->
+                        <div class="w-[320px] group cursor-hover">
+                            <div
+                                class="h-[400px] bg-gray-200 border-2 border-black relative overflow-hidden clip-corner-cut mb-4">
+                                <img src="./public/core team/Efraim Waraney.webp"
+                                    class="w-full h-full object-cover md:grayscale md:group-hover:grayscale-0 transition-all duration-500">
+                                <div
+                                    class="absolute bottom-0 left-0 bg-brand-orange px-3 py-1 border-t border-r border-black font-bold text-xs uppercase">
+                                    Co-Founder</div>
+                            </div>
+                            <h3
+                                class="font-display text-3xl uppercase leading-none mb-1 group-hover:text-brand-orange transition-colors">
+                                Efraim<br>Waraney</h3>
+                            <div class="flex gap-2 mt-2">
+                                <a href="http://www.instagram.com/efraim.waraney"
+                                    class="font-mono text-xs uppercase opacity-60 hover:opacity-100">@efraim.waraney</a>
+                            </div>
+                        </div>
+                        <!-- Tifena -->
+                        <div class="w-[320px] group cursor-hover">
+                            <div
+                                class="h-[400px] bg-gray-200 border-2 border-black relative overflow-hidden clip-corner-cut mb-4">
+                                <img src="./public/core team/Tifena Tania.webp"
+                                    class="w-full h-full object-cover md:grayscale md:group-hover:grayscale-0 transition-all duration-500">
+                                <div
+                                    class="absolute bottom-0 left-0 bg-brand-green text-white px-3 py-1 border-t border-r border-black font-bold text-xs uppercase">
+                                    Operational</div>
+                            </div>
+                            <h3
+                                class="font-display text-3xl uppercase leading-none mb-1 group-hover:text-brand-orange transition-colors">
+                                Tifena<br>Tania</h3>
+                            <div class="flex gap-2 mt-2">
+                                <a href="http://www.instagram.com/tifenaa"
+                                    class="font-mono text-xs uppercase opacity-60 hover:opacity-100">@tifenaa</a>
+                            </div>
+                        </div>
+                        <!-- Stefanni -->
+                        <div class="w-[320px] group cursor-hover">
+                            <div
+                                class="h-[400px] bg-gray-200 border-2 border-black relative overflow-hidden clip-corner-cut mb-4">
+                                <img src="./public/core team/Stefanni Oei.webp"
+                                    class="w-full h-full object-cover md:grayscale md:group-hover:grayscale-0 transition-all duration-500">
+                                <div
+                                    class="absolute bottom-0 left-0 bg-white px-3 py-1 border-t border-r border-black font-bold text-xs uppercase">
+                                    Creative Director</div>
+                            </div>
+                            <h3
+                                class="font-display text-3xl uppercase leading-none mb-1 group-hover:text-brand-orange transition-colors">
+                                Stefanni<br>Oei</h3>
+
+                            <div class="flex gap-2 mt-2">
+                                <a href="http://www.instagram.com/stefannioei"
+                                    class="font-mono text-xs uppercase opacity-60 hover:opacity-100">@stefannioei</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROGRAMS (Ex Roadmap) -->
+        <section id="roadmap" class="bg-brand-pink py-24 px-4 bg-grid-black">
+            <div class="max-w-5xl mx-auto bg-white border-2 border-black shadow-hard">
+                <div class="flex border-b-2 border-black">
+                    <button
+                        class="flex-1 py-6 text-center font-display text-2xl uppercase bg-black text-white hover:bg-black/90 cursor-hover">Programs</button>
+                    <button
+                        class="flex-1 py-6 text-center font-display text-2xl uppercase hover:bg-brand-orange transition-colors cursor-hover">Events</button>
+                </div>
+                <div class="p-8 border-b-2 border-black flex justify-between items-center bg-brand-light">
+                    <h2 class="font-display text-3xl md:text-4xl uppercase">Training & Workshops</h2>
+                    <span class="font-bold text-xs uppercase border border-black px-2 py-1 bg-white">Upcoming</span>
+                </div>
+                <div class="divide-y-2 divide-black">
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-12 group hover:bg-brand-orange/10 transition-colors cursor-hover">
+                        <div
+                            class="md:col-span-3 p-0 border-b md:border-b-0 flex items-center justify-center bg-gray-100 overflow-hidden">
+                            <img src="./public/training and workshop/TDM%20Workshop%20Serve%20the%20Lord%20through%20Digital%20Ministry.webp"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <div class="md:col-span-6 p-6 border-l-0 md:border-l-2 border-black">
+                            <h3 class="font-display text-2xl uppercase mb-2">TDM Workshop</h3>
+                            <p class="text-base leading-relaxed">Serve the Lord Through Digital Ministry.</p>
+                        </div>
+                        <div
+                            class="md:col-span-3 p-6 border-l-0 md:border-l-2 border-black flex items-center justify-end md:justify-center">
+                            <span class="bg-black text-white text-[10px] uppercase font-bold px-2 py-1">Join</span>
+                        </div>
+                    </div>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-12 group hover:bg-brand-orange/10 transition-colors cursor-hover">
+                        <div
+                            class="md:col-span-3 p-0 border-b md:border-b-0 flex items-center justify-center bg-gray-100 overflow-hidden">
+                            <img src="./public/training and workshop/Creative%20Workshop.webp"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <div class="md:col-span-6 p-6 border-l-0 md:border-l-2 border-black">
+                            <h3 class="font-display text-2xl uppercase mb-2">Creative Workshop</h3>
+                            <p class="text-base leading-relaxed">Mastering Color Theory and How to Apply It.</p>
+                        </div>
+                        <div
+                            class="md:col-span-3 p-6 border-l-0 md:border-l-2 border-black flex items-center justify-end md:justify-center">
+                            <span
+                                class="border border-black text-black text-[10px] uppercase font-bold px-2 py-1">Register</span>
+                        </div>
+                    </div>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-12 group hover:bg-brand-green/10 transition-colors cursor-hover">
+                        <div
+                            class="md:col-span-3 p-0 border-b md:border-b-0 flex items-center justify-center bg-gray-100 overflow-hidden">
+                            <img src="./public/training and workshop/Zend-U.webp" class="w-full h-full object-cover">
+                        </div>
+                        <div class="md:col-span-6 p-6 border-l-0 md:border-l-2 border-black">
+                            <h3 class="font-display text-2xl uppercase mb-2 text-brand-green">Zend University</h3>
+                            <p class="text-base leading-relaxed">Zend-U</p>
+                        </div>
+                        <div
+                            class="md:col-span-3 p-6 border-l-0 md:border-l-2 border-black flex items-center justify-end md:justify-center">
+                            <span
+                                class="bg-brand-green text-white text-[10px] uppercase font-bold px-2 py-1">Learn</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLATFORM (Ex VENUE) -->
+        <section id="platform" class="bg-white py-0 border-y-4 border-black">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <div class="p-12 md:p-24 flex flex-col justify-center bg-brand-light">
+                    <div class="mb-8">
+                        <span
+                            class="bg-brand-black text-white px-2 py-1 text-xs font-bold uppercase tracking-widest">Platform</span>
+                    </div>
+                    <h2 class="font-display text-6xl uppercase mb-8">Comprehensive<br>Toolkit</h2>
+                    <p class="font-body text-xl leading-relaxed mb-8 max-w-md">
+                        A centralized platform combining design resources, scheduling tools, and team collaboration
+                        features. Built for churches of all sizes.
+                    </p>
+                    <div class="space-y-4 font-mono text-base uppercase">
+                        <div class="flex items-center gap-4 group cursor-hover">
+                            <span
+                                class="w-8 h-8 bg-black text-white flex items-center justify-center font-bold group-hover:bg-brand-orange transition-colors">1</span>
+                            <span>Browser Based (Chrome/Safari)</span>
+                        </div>
+                        <div class="flex items-center gap-4 group cursor-hover">
+                            <span
+                                class="w-8 h-8 bg-black text-white flex items-center justify-center font-bold group-hover:bg-brand-orange transition-colors">2</span>
+                            <span>Cloud Storage Integration</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="bg-white p-4 overflow-hidden relative min-h-[500px] flex items-center justify-center bg-grid-black">
+                    <div
+                        class="grid grid-cols-10 gap-1 w-full max-w-md mx-auto transform rotate-45 scale-75 md:scale-100">
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell active-zone"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell active-zone"></div>
+                        <div class="map-grid-cell active-zone"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell building"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                        <div class="map-grid-cell"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ASK (Ex Pricing) -->
+        <section id="pricing" class="bg-brand-light py-24 px-4 bg-grid-black border-y-4 border-black">
+            <div class="max-w-[1400px] mx-auto">
+                <div class="flex flex-col md:flex-row items-end justify-between mb-16 px-4">
+                    <h2 class="font-display text-6xl md:text-8xl text-black uppercase leading-[0.8]">
+                        Partner<br><span class="text-brand-orange">With Us</span>
+                    </h2>
+                    <p class="max-w-sm text-right font-medium mt-6 md:mt-0 opacity-70">
+                        Join us in equipping the digital church.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+                    <!-- Collaboration -->
+                    <div
+                        class="pricing-card bg-white border-2 border-black p-8 shadow-hard transition-all duration-300 flex flex-col relative overflow-hidden cursor-hover">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-10 font-display text-9xl leading-none -mr-8 -mt-4">
+                            01</div>
+                        <h3 class="font-display text-4xl uppercase mb-2">Collab</h3>
+                        <div class="font-bold text-3xl mb-6">Partner</div>
+                        <p class="text-base border-b border-black pb-6 mb-6 opacity-80">Connect with us to do great and
+                            effective things in this digital ministry.</p>
+                        <ul class="space-y-3 mb-8 text-sm font-bold flex-grow">
+                            <li class="flex gap-3 items-center">
+                                <div class="w-1.5 h-1.5 bg-black"></div> Strategic Partnership
+                            </li>
+                            <li class="flex gap-3 items-center">
+                                <div class="w-1.5 h-1.5 bg-black"></div> Joint Events
+                            </li>
+                            <li class="flex gap-3 items-center">
+                                <div class="w-1.5 h-1.5 bg-black"></div> Network Expansion
+                            </li>
+                        </ul>
+                        <button
+                            class="w-full py-4 border-2 border-black font-bold uppercase hover:bg-black hover:text-white transition-colors">Contact
+                            Us</button>
+                    </div>
+                    <!-- Join Team -->
+                    <div
+                        class="pricing-card bg-brand-pink border-2 border-black p-8 shadow-hard transition-all duration-300 flex flex-col relative overflow-hidden transform md:-translate-y-8 z-10 cursor-hover">
+                        <div class="absolute top-0 right-0 bg-black text-white px-4 py-1 text-xs font-bold uppercase">
+                            Volunteer</div>
+                        <h3 class="font-display text-4xl uppercase mb-2">Join</h3>
+                        <div class="font-bold text-3xl mb-6">The Team</div>
+                        <p class="text-sm border-b border-black pb-6 mb-6 opacity-80">Support us by volunteering.</p>
+                        <ul class="space-y-3 mb-8 text-sm font-bold flex-grow">
+                            <li class="flex gap-3 items-center text-white">
+                                <div class="w-1.5 h-1.5 bg-white"></div> Operational Team
+                            </li>
+                            <li class="flex gap-3 items-center text-white">
+                                <div class="w-1.5 h-1.5 bg-white"></div> Creative Team
+                            </li>
+                            <li class="flex gap-3 items-center text-white">
+                                <div class="w-1.5 h-1.5 bg-white"></div> Community Development
+                            </li>
+                            <li class="flex gap-3 items-center text-white">
+                                <div class="w-1.5 h-1.5 bg-white"></div> Passionate Servers
+                            </li>
+                        </ul>
+                        <button
+                            class="w-full py-4 bg-black text-white font-bold uppercase hover:bg-white hover:text-black border-2 border-black transition-colors">Apply
+                            Now</button>
+                    </div>
+                    <!-- Donate -->
+                    <div
+                        class="pricing-card bg-white border-2 border-black p-8 shadow-hard transition-all duration-300 flex flex-col relative overflow-hidden cursor-hover">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-10 font-display text-9xl leading-none -mr-8 -mt-4">
+                            03</div>
+                        <h3 class="font-display text-4xl uppercase mb-2">Give</h3>
+                        <div class="font-bold text-3xl mb-6">Donate</div>
+                        <p class="text-base border-b border-black pb-6 mb-6 opacity-80">Support us financially to make a
+                            positive influence.</p>
+                        <ul class="space-y-3 mb-8 text-sm font-bold flex-grow">
+                            <li class="flex gap-3 items-center">
+                                <div class="w-1.5 h-1.5 bg-black"></div> Financial Support
+                            </li>
+                            <li class="flex gap-3 items-center">
+                                <div class="w-1.5 h-1.5 bg-black"></div> Reach More People
+                            </li>
+                            <li class="flex gap-3 items-center">
+                                <div class="w-1.5 h-1.5 bg-black"></div> Equip Ministers
+                            </li>
+                        </ul>
+                        <button onclick="toggleDonateModal()"
+                            class="w-full py-4 border-2 border-black font-bold uppercase hover:bg-black hover:text-white transition-colors">Donate
+                            (QRIS)</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ SECTION -->
+        <section id="faq" class="bg-brand-green py-24 px-4 bg-grid-white border-b-4 border-black">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="font-display text-6xl text-white uppercase mb-12 text-center">Frequently<br>Asked Questions
+                </h2>
+                <div class="space-y-4">
+                    <div class="faq-item bg-white border-2 border-black shadow-hard group cursor-pointer cursor-hover">
+                        <div class="p-6 flex justify-between items-center">
+                            <h3 class="font-display text-xl uppercase">Can I use these for my church stream?</h3>
+                            <div class="faq-icon text-2xl">+</div>
+                        </div>
+                        <div class="faq-content bg-brand-light border-t-2 border-black">
+                            <p class="p-6 text-sm leading-relaxed">Yes! All assets come with a commercial license for
+                                ministry use, including live streams, social media, and printed bulletins.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item bg-white border-2 border-black shadow-hard group cursor-pointer cursor-hover">
+                        <div class="p-6 flex justify-between items-center">
+                            <h3 class="font-display text-xl uppercase">Do I need Photoshop?</h3>
+                            <div class="faq-icon text-2xl">+</div>
+                        </div>
+                        <div class="faq-content bg-brand-light border-t-2 border-black">
+                            <p class="p-6 text-sm leading-relaxed">No. We provide editable templates that work right in
+                                your browser. However, we also provide PSD files for advanced users.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item bg-white border-2 border-black shadow-hard group cursor-pointer cursor-hover">
+                        <div class="p-6 flex justify-between items-center">
+                            <h3 class="font-display text-xl uppercase">Can I cancel anytime?</h3>
+                            <div class="faq-icon text-2xl">+</div>
+                        </div>
+                        <div class="faq-content bg-brand-light border-t-2 border-black">
+                            <p class="p-6 text-sm leading-relaxed">Absolutely. There are no long-term contracts. You can
+                                upgrade, downgrade, or cancel your subscription at any time.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMMUNITY VOICES -->
+        <section class="bg-brand-blue text-white py-24 overflow-hidden border-b-4 border-black">
+            <div class="max-w-[1400px] mx-auto px-6 mb-12">
+                <h2 class="font-display text-5xl uppercase mb-8">Ministry Voices</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="border border-white/20 p-8 hover:bg-white/5 transition-colors cursor-hover">
+                        <p class="font-body text-xl italic mb-6">"This platform saved our media team hours of work every
+                            week. The designs are top tier."</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-brand-pink rounded-full"></div>
+                            <div>
+                                <div class="font-bold uppercase">Pastor Michael R.</div>
+                                <div class="text-xs opacity-60">Lead Pastor, New Hope Church</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border border-white/20 p-8 hover:bg-white/5 transition-colors cursor-hover">
+                        <p class="font-body text-xl italic mb-6">"Finally, diverse stock photos that actually look like
+                            our community. A game changer."</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-brand-orange rounded-full"></div>
+                            <div>
+                                <div class="font-bold uppercase">Sarah J.</div>
+                                <div class="text-xs opacity-60">Creative Director, City Light</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MARQUEE FOOTER -->
+        <section class="bg-black text-white py-12 overflow-hidden border-b-4 border-black">
+            <div class="flex gap-16 w-max animate-marquee">
+                <span class="text-6xl font-display text-transparent"
+                    style="-webkit-text-stroke: 1px white;">WORSHIP</span>
+                <span class="text-6xl font-display text-brand-pink">OUTREACH</span>
+                <span class="text-6xl font-display text-transparent"
+                    style="-webkit-text-stroke: 1px white;">COMMUNITY</span>
+                <span class="text-6xl font-display text-brand-orange">MEDIA</span>
+                <span class="text-6xl font-display text-transparent"
+                    style="-webkit-text-stroke: 1px white;">DISCIPLESHIP</span>
+                <span class="text-6xl font-display text-brand-green">DESIGN</span>
+                <span class="text-6xl font-display text-transparent"
+                    style="-webkit-text-stroke: 1px white;">YOUTH</span>
+                <span class="text-6xl font-display text-transparent"
+                    style="-webkit-text-stroke: 1px white;">WORSHIP</span>
+                <span class="text-6xl font-display text-brand-pink">OUTREACH</span>
+                <span class="text-6xl font-display text-transparent"
+                    style="-webkit-text-stroke: 1px white;">COMMUNITY</span>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-brand-dark pt-32 pb-0 px-6 overflow-hidden">
+            <div class="max-w-[1400px] mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-start mb-24">
+                    <div class="mb-12 md:mb-0">
+                        <h2 class="text-white font-display text-5xl mb-6">Contact Us</h2>
+                        <div class="flex flex-col gap-2 text-white/90">
+                            <p class="font-bold uppercase text-lg">Larry Christofal</p>
+                            <p class="text-base opacity-70">Co-Founder</p>
+                            <a href="http://wa.me/+6285395144111"
+                                class="hover:text-brand-pink transition-colors mt-2">+62 853-9514-4111</a>
+                            <a href="mailto:contact@thedigitalministry.org"
+                                class="hover:text-brand-pink transition-colors">contact@thedigitalministry.org</a>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-16 text-white/60 font-mono text-xs uppercase tracking-widest">
+                        <div class="flex flex-col gap-4">
+                            <a href="http://www.instagram.com/thedigitalministry/"
+                                class="hover:text-white cursor-hover">Instagram</a>
+                            <a href="#" class="hover:text-white cursor-hover">Twitter / X</a>
+                        </div>
+                        <div class="flex flex-col gap-4">
+                            <a href="#" class="hover:text-white cursor-hover">Terms of Service</a>
+                            <a href="#" class="hover:text-white cursor-hover">Privacy Policy</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-white/20 pt-8 flex justify-between items-center">
+                    <p class="text-white/40 text-[10px] uppercase">© 2026 The Digital Ministry. All rights reserved.</p>
+                </div>
+                <h1
+                    class="font-display text-[14vw] text-center text-brand-pink leading-none opacity-10 select-none translate-y-[20%] pointer-events-none">
+                    MINISTRY</h1>
+            </div>
+        </footer>
+    </div>
+
+    <!-- DONATE MODAL -->
+    <div id="donate-modal" class="fixed inset-0 z-[100] hidden" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop"
+            onclick="toggleDonateModal()"></div>
+
+        <!-- Content -->
+        <div class="relative z-10 flex min-h-screen items-center justify-center p-4">
+            <div class="relative w-full max-w-md transform transition-all scale-95 opacity-0" id="modal-content">
+                <!-- Close Button -->
+                <button onclick="toggleDonateModal()"
+                    class="absolute -top-12 right-0 text-white hover:text-brand-pink transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+
+                <!-- Image -->
+                <img src="./public/donate.webp" alt="Donate QRIS"
+                    class="w-full rounded-sm shadow-2xl border-2 border-white/20">
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script type="module" src="./js/main.js"></script>
+    <script>
+        function toggleDonateModal() {
+            const modal = document.getElementById('donate-modal');
+            const backdrop = document.getElementById('modal-backdrop');
+            const content = document.getElementById('modal-content');
+
+            if (modal.classList.contains('hidden')) {
+                // Open
+                modal.classList.remove('hidden');
+                // Small delay to allow display:block to apply before opacity transition
+                setTimeout(() => {
+                    backdrop.classList.remove('opacity-0');
+                    content.classList.remove('scale-95', 'opacity-0');
+                }, 10);
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            } else {
+                // Close
+                backdrop.classList.add('opacity-0');
+                content.classList.add('scale-95', 'opacity-0');
+
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 300); // Match transition duration
+            }
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('donate-modal');
+                if (!modal.classList.contains('hidden')) {
+                    toggleDonateModal();
+                }
+
+                // Also close mobile menu if open
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (!mobileMenu.classList.contains('opacity-0')) {
+                    toggleMobileMenu();
+                }
+            }
+        });
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+
+            if (menu.classList.contains('opacity-0')) {
+                // Open
+                menu.classList.remove('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'hidden';
+            } else {
+                // Close
+                menu.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = '';
+            }
+        }
+    </script>
+</body>
+
+</html>
